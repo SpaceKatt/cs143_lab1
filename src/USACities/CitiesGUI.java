@@ -130,9 +130,9 @@ public class CitiesGUI extends JFrame {
      * pre-condition: ArrayList cities filled-in with City objects.
      * post-condition: cities ArrayList is sorted by name.
      */
-    public static void insertionSort(ArrayList <City> cities)
-    {
-	
+    public static void insertionSort(ArrayList <City> cities) {
+	InsertionSortCityName sorter = new InsertionSortCityName();
+        sorter.sort(cities);
     }
 
     /**
@@ -145,9 +145,9 @@ public class CitiesGUI extends JFrame {
      * pre-condition: ArrayList cities filled-in with City objects.
      * post-condition: cities ArrayList is sorted by population.
      */
-    public void selectionSort(ArrayList < City > cities)
-    {
-       
+    public void selectionSort(ArrayList < City > cities) {
+        SelectionSortPopulation sorter = new SelectionSortPopulation();
+        sorter.sort(cities);
     }  
 
     /**
@@ -672,6 +672,7 @@ public class CitiesGUI extends JFrame {
     private void nameJRadioButtonMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_nameJRadioButtonMenuItemActionPerformed
     {//GEN-HEADEREND:event_nameJRadioButtonMenuItemActionPerformed
         // display cities sorted by name
+        insertionSort(this.cities);
         displayCities();        
 }//GEN-LAST:event_nameJRadioButtonMenuItemActionPerformed
 
@@ -679,6 +680,7 @@ public class CitiesGUI extends JFrame {
     private void popJRadioButtonMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_popJRadioButtonMenuItemActionPerformed
     {//GEN-HEADEREND:event_popJRadioButtonMenuItemActionPerformed
         // display cities sorted by population
+        selectionSort(this.cities);
         displayCities();        
 }//GEN-LAST:event_popJRadioButtonMenuItemActionPerformed
 
