@@ -1,263 +1,832 @@
-/*
- * Copyright (C) 2016 thomas.kercheval
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package USACities;
 
-/**
- *
- * @author thomas.kercheval
- */
-public class CitiesGUI extends javax.swing.JFrame {
+import java.awt.Toolkit;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import javax.swing.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-    /**
-     * Creates new form CitiesGUI
+/**
+ * CitiesGUI.java
+ A class representing the GUI used in a maintaining a cities database.
+ * <pre>
+    Project: CitiesGUI Database
+    Platform: jdk 1.8.0_14; NetBeans IDE 8.1; Windows 10
+    Course:
+    Hours: 2 hours and 45 minutes
+    Created on Apr 4, 2011, 1:45:39 PM
+    Revised on
+ </pre>
+ *
+ * @author:	nculevsk@edcc.edu
+ * @version: 	%1% %2%
+ * @see:     	javax.swing
+ * @see:        java.awt.Toolkit
+ * @see         java.util.ArrayList
+ */
+
+public class CitiesGUI extends JFrame {
+    // Class instance ArrayList of City objects
+    private ArrayList<City> cities = new ArrayList<>();
+    
+    // external file name of cities
+    private final String fileName = "src/USACities/Citystats.txt";
+    //private final String fileNameXML = "src/USACities/Cities.xml";
+    DecimalFormat number = new DecimalFormat("#,##0");        
+    
+    //Javadocs??    
+    /** Creates new form CitiesGUI */
+    /** Default constructor
+     * Creates new form Cities form centered, with Add button as default
+     * The cities are read from an external text file, Citystats.txt, into
+     * an ArrayList of City type
      */
-    public CitiesGUI() {
+    public CitiesGUI()
+    {
         initComponents();
+        this.getRootPane().setDefaultButton(addJButton); //set buttonAdd as default
+        this.setIconImage(Toolkit.getDefaultToolkit().
+                getImage("src/USACities/buckinghamfountain_small.jpg"));
+        //centers the form at start.
+        setLocationRelativeTo(null);
+        
+        // Read form an external file Citystats.txt and create an
+        // ArrayList of City type, cities        
+        readFromFile(fileName);
+        
+        // Show the city names in the JList
+        displayCities();
+        showCityData(citiesJList.getSelectedIndex());
+    }
+    
+    
+    /**
+     * Method: readFromFile
+     * Reads cities from a text file that is comma delimited and
+     * creates an instance of the City class with the data read.
+     * Then the newly created city is added to the cities database.
+     * Uses an object from the ReadFile class to read record.
+     * @parem file: String
+     * @return void
+     * pre-condition: a valid file name, Citystats.txt is expected
+     * for input with comma separated text fields (but no spaces) for
+     * city name, population, median, local, and degree
+     * post-condition: a new City is created with the read fields
+     * and added to the ArrayList cities
+     * @see ReadFile
+     * @see Member
+     */
+    public void readFromFile(String file)            
+    {
+        cities.clear();
+        CityFileReader reader = new CityFileReader(file);
+        String line = null;
+        while ((line = reader.readRecord()) != null) {
+            String[] city_info = line.split(",");
+            City city = new City(city_info);
+            cities.add(city);
+        }
+        reader.close();
+    }
+    
+    /**
+     * Method: displayCities()
+     * Displays cities in JList sorted by level = 0 using selection sort
+     * algorithm or last name = 1 using the insertion sort algorithm.
+     * @parem void
+     * @return void
+     * pre-condition: Uses the ArrayList cities.
+     * post-condition: cities ArrayList is sorted and displayed either by
+     * level or last name.
+     * @see #selectionSort
+     * @see #insetionSort
+     */
+    private void displayCities()
+    {
+        DefaultListModel model = new DefaultListModel();
+        for (City city: cities) {
+            String name = city.getName();
+            if (!model.contains(name)) {
+                model.addElement(name);
+            }
+        }
+        citiesJList.setModel(model);
     }
 
     /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
+     * Method: insertionSort
+     * Sorts ArrayList cities in ascending order by name. Uses the insertion
+     * sort algorithm which inserts city at correct position and shuffles
+     * everyone else below that position.
+     * @parem ArrayList: cities
+     * @return void
+     * pre-condition: ArrayList cities filled-in with City objects.
+     * post-condition: cities ArrayList is sorted by name.
      */
+    public static void insertionSort(ArrayList <City> cities)
+    {
+	
+    }
+
+    /**
+     * Method: selectionSort
+     * Sorts ArrayList cities in descending order by population. Calls
+     * findsMaximum to find city with maximum population in each pass
+     * and swap to exchange cities when necessary.
+     * @parem ArrayList: cities
+     * @return void
+     * pre-condition: ArrayList cities filled-in with City objects.
+     * post-condition: cities ArrayList is sorted by population.
+     */
+    public void selectionSort(ArrayList < City > cities)
+    {
+       
+    }  
+
+    /**
+     * Method: findMaximum
+     * Called by selectionSort to find the index of the member with the maximum
+     * population from a given index to the end of the ArrayList
+     * @parem ArrayList: cities
+     * @parem  int i: index from which to search for the max >= 0
+     * @return int: position or index  where maximum is located
+     * pre-condition: ArrayList members filled-in with members objects, int i >= 0.
+     * post-condition: members ArrayList is sorted by level.
+     */
+    public int findMaximum(ArrayList < City > cities, int i)
+    {
+       int max = 0;
+       return max;
+    }
+
+    /**
+     * Method: swap
+     * Called by selectionSort to find the index of the member with the maximum
+     * level from a given index to the end of the ArrayList
+     * @parem ArrayList: members
+     * @parem  int i: index of element to be swapped >= 0
+     * @parem  int j: index of element to be swapped >= 0
+     * @return void
+     * pre-condition: ArrayList members filled-in with members objects, int i, j >= 0.
+     * post-condition: members ArrayList with two members swapped.
+     */
+    public void swap(ArrayList < City > cities, int i, int j)
+    {
+       
+    }
+
+    // Binary search for city 
+
+    /** showCityData
+     * This method is called from within the constructor to
+     * display the data for the selected city.
+     * WARNING: Do NOT modify this code. The content of this method is
+     * always regenerated by the Form Editor.
+     */
+    private void showCityData(int index)
+    {
+        if (index == -1) {
+            index = 0;
+        }
+        nameJTextField.setText(cities.get(index).getName());
+        popJTextField.setText(String.valueOf(cities.get(index).getPopulation()));
+        medianJTextField.setText("$" + number.format(cities.get(index).getMedian()));
+        percentJTextField.setText(number.format(cities.get(index).getLocal()) + "%");
+        degreeJTextField.setText(number.format(cities.get(index).getDegree()) + "%");
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        menuButtonGroup = new javax.swing.ButtonGroup();
+        menubuttonGroup = new javax.swing.ButtonGroup();
         titleJPanel = new javax.swing.JPanel();
-        logoJLabel1 = new javax.swing.JLabel();
-        titleJLabel1 = new javax.swing.JLabel();
-        listJPanel1 = new javax.swing.JPanel();
-        displayJPanel1 = new javax.swing.JPanel();
-        controlJPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        logoJLabel = new javax.swing.JLabel();
+        titleJLabel = new javax.swing.JLabel();
+        listJPanel = new javax.swing.JPanel();
+        llistJScrollPane = new javax.swing.JScrollPane();
+        citiesJList = new javax.swing.JList();
+        displayJPanel = new javax.swing.JPanel();
+        nameJLabel = new javax.swing.JLabel();
+        nameJTextField = new javax.swing.JTextField();
+        popJLabel = new javax.swing.JLabel();
+        popJTextField = new javax.swing.JTextField();
+        medianJLabel = new javax.swing.JLabel();
+        medianJTextField = new javax.swing.JTextField();
+        percentJLabel = new javax.swing.JLabel();
+        percentJTextField = new javax.swing.JTextField();
+        degreetJLabel = new javax.swing.JLabel();
+        degreeJTextField = new javax.swing.JTextField();
+        controlPanel = new javax.swing.JPanel();
+        addJButton = new javax.swing.JButton();
+        editJButton = new javax.swing.JButton();
+        deleteJButton = new javax.swing.JButton();
+        printJButton = new javax.swing.JButton();
+        exitJButton = new javax.swing.JButton();
         citiesJMenuBar = new javax.swing.JMenuBar();
-        fileJMenu1 = new javax.swing.JMenu();
-        clearJenuItem = new javax.swing.JMenuItem();
-        printJenuItem = new javax.swing.JMenuItem();
-        fileSeperator = new javax.swing.JPopupMenu.Separator();
+        fileJMenu = new javax.swing.JMenu();
+        clearJMenuItem = new javax.swing.JMenuItem();
+        printJMenuItem = new javax.swing.JMenuItem();
+        fileJSeparator = new javax.swing.JPopupMenu.Separator();
         exitJMenuItem = new javax.swing.JMenuItem();
         sortJMenu = new javax.swing.JMenu();
         nameJRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
         popJRadioButtonMenuItem = new javax.swing.JRadioButtonMenuItem();
         actionJMenu = new javax.swing.JMenu();
-        addJenuItem = new javax.swing.JMenuItem();
+        addJMenuItem = new javax.swing.JMenuItem();
+        deleteJMenuItem = new javax.swing.JMenuItem();
         editJMenuItem = new javax.swing.JMenuItem();
-        deleteJenuItem = new javax.swing.JMenuItem();
         searchJMenuItem = new javax.swing.JMenuItem();
-        HelpJMenu = new javax.swing.JMenu();
+        helpJMenu = new javax.swing.JMenu();
         aboutJMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Large USA Cities");
+        setTitle("Large USA Cities Statistics");
+        setResizable(false);
 
-        logoJLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/USACities/buckinghamfountainsmall.jpg"))); // NOI18N
+        logoJLabel.setFont(new java.awt.Font("Tahoma", 2, 24)); // NOI18N
+        logoJLabel.setForeground(new java.awt.Color(51, 0, 0));
+        logoJLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/USACities/buckinghamfountain.jpg"))); // NOI18N
 
-        titleJLabel1.setFont(new java.awt.Font("Old English Text MT", 2, 36)); // NOI18N
-        titleJLabel1.setForeground(new java.awt.Color(0, 33, 46));
-        titleJLabel1.setText("Large Cities in USA");
+        titleJLabel.setFont(new java.awt.Font("Tempus Sans ITC", 2, 24)); // NOI18N
+        titleJLabel.setForeground(new java.awt.Color(51, 0, 0));
+        titleJLabel.setText("Large Cities in USA");
 
         javax.swing.GroupLayout titleJPanelLayout = new javax.swing.GroupLayout(titleJPanel);
         titleJPanel.setLayout(titleJPanelLayout);
         titleJPanelLayout.setHorizontalGroup(
             titleJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(titleJPanelLayout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addComponent(logoJLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
-                .addComponent(titleJLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37))
+                .addContainerGap(30, Short.MAX_VALUE)
+                .addComponent(logoJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(titleJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21))
         );
         titleJPanelLayout.setVerticalGroup(
             titleJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(titleJPanelLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, titleJPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(titleJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, titleJPanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(logoJLabel1))
-                    .addComponent(titleJLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(titleJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(logoJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 43, Short.MAX_VALUE)
+                    .addComponent(titleJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         getContentPane().add(titleJPanel, java.awt.BorderLayout.NORTH);
 
-        javax.swing.GroupLayout listJPanel1Layout = new javax.swing.GroupLayout(listJPanel1);
-        listJPanel1.setLayout(listJPanel1Layout);
-        listJPanel1Layout.setHorizontalGroup(
-            listJPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-        listJPanel1Layout.setVerticalGroup(
-            listJPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 329, Short.MAX_VALUE)
-        );
+        citiesJList.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        citiesJList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                citiesJListValueChanged(evt);
+            }
+        });
+        llistJScrollPane.setViewportView(citiesJList);
 
-        getContentPane().add(listJPanel1, java.awt.BorderLayout.WEST);
-
-        javax.swing.GroupLayout displayJPanel1Layout = new javax.swing.GroupLayout(displayJPanel1);
-        displayJPanel1.setLayout(displayJPanel1Layout);
-        displayJPanel1Layout.setHorizontalGroup(
-            displayJPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 530, Short.MAX_VALUE)
+        javax.swing.GroupLayout listJPanelLayout = new javax.swing.GroupLayout(listJPanel);
+        listJPanel.setLayout(listJPanelLayout);
+        listJPanelLayout.setHorizontalGroup(
+            listJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, listJPanelLayout.createSequentialGroup()
+                .addContainerGap(28, Short.MAX_VALUE)
+                .addComponent(llistJScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
-        displayJPanel1Layout.setVerticalGroup(
-            displayJPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 329, Short.MAX_VALUE)
+        listJPanelLayout.setVerticalGroup(
+            listJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(llistJScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
         );
 
-        getContentPane().add(displayJPanel1, java.awt.BorderLayout.CENTER);
+        getContentPane().add(listJPanel, java.awt.BorderLayout.LINE_START);
 
-        controlJPanel1.setLayout(new java.awt.GridLayout(1, 4, 3, 3));
+        displayJPanel.setLayout(new java.awt.GridLayout(5, 2, 5, 5));
 
-        jButton1.setText("jButton1");
-        controlJPanel1.add(jButton1);
+        nameJLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        nameJLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        nameJLabel.setText("Name of city: ");
+        displayJPanel.add(nameJLabel);
 
-        getContentPane().add(controlJPanel1, java.awt.BorderLayout.SOUTH);
+        nameJTextField.setEditable(false);
+        nameJTextField.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        displayJPanel.add(nameJTextField);
 
-        fileJMenu1.setMnemonic('F');
-        fileJMenu1.setText("File");
+        popJLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        popJLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        popJLabel.setText("Population (in millions): ");
+        displayJPanel.add(popJLabel);
 
-        clearJenuItem.setMnemonic('c');
-        clearJenuItem.setText("Clear");
-        fileJMenu1.add(clearJenuItem);
+        popJTextField.setEditable(false);
+        popJTextField.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        popJTextField.setToolTipText("Press Enter to update");
+        displayJPanel.add(popJTextField);
 
-        printJenuItem.setMnemonic('p');
-        printJenuItem.setText("Print");
-        fileJMenu1.add(printJenuItem);
-        fileJMenu1.add(fileSeperator);
+        medianJLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        medianJLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        medianJLabel.setText("Median income (per household): ");
+        displayJPanel.add(medianJLabel);
+
+        medianJTextField.setEditable(false);
+        medianJTextField.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        medianJTextField.setToolTipText("Enter with no $ or commas and press Enter to update");
+        displayJPanel.add(medianJTextField);
+
+        percentJLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        percentJLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        percentJLabel.setText("Percent native to state: ");
+        displayJPanel.add(percentJLabel);
+
+        percentJTextField.setEditable(false);
+        percentJTextField.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        percentJTextField.setToolTipText("Enter without % sign and pres Enter to update");
+        displayJPanel.add(percentJTextField);
+
+        degreetJLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        degreetJLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        degreetJLabel.setText("Percent advanced degrees: ");
+        displayJPanel.add(degreetJLabel);
+
+        degreeJTextField.setEditable(false);
+        degreeJTextField.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        degreeJTextField.setToolTipText("Enter without % sign and press Enter to update");
+        displayJPanel.add(degreeJTextField);
+
+        getContentPane().add(displayJPanel, java.awt.BorderLayout.CENTER);
+
+        controlPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        controlPanel.setMinimumSize(new java.awt.Dimension(299, 45));
+        controlPanel.setLayout(new java.awt.GridLayout(1, 5, 5, 5));
+
+        addJButton.setBackground(new java.awt.Color(204, 255, 204));
+        addJButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        addJButton.setMnemonic('A');
+        addJButton.setText("Add");
+        addJButton.setToolTipText("Add new city");
+        addJButton.setMinimumSize(new java.awt.Dimension(57, 45));
+        addJButton.setPreferredSize(new java.awt.Dimension(57, 35));
+        addJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addJButtonActionPerformed(evt);
+            }
+        });
+        controlPanel.add(addJButton);
+
+        editJButton.setBackground(new java.awt.Color(204, 255, 204));
+        editJButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        editJButton.setMnemonic('E');
+        editJButton.setText("Edit");
+        editJButton.setToolTipText("Edit city. Press Enter in any of the JTextFields to confirm changes...");
+        editJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editJButtonActionPerformed(evt);
+            }
+        });
+        controlPanel.add(editJButton);
+
+        deleteJButton.setBackground(new java.awt.Color(204, 255, 204));
+        deleteJButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        deleteJButton.setMnemonic('D');
+        deleteJButton.setText("Delete");
+        deleteJButton.setToolTipText("Delete city");
+        deleteJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteJButtonActionPerformed(evt);
+            }
+        });
+        controlPanel.add(deleteJButton);
+
+        printJButton.setBackground(new java.awt.Color(204, 255, 204));
+        printJButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        printJButton.setMnemonic('P');
+        printJButton.setText("Print");
+        printJButton.setToolTipText("Print individual city data");
+        printJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printJButtonActionPerformed(evt);
+            }
+        });
+        controlPanel.add(printJButton);
+
+        exitJButton.setBackground(new java.awt.Color(204, 255, 204));
+        exitJButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        exitJButton.setMnemonic('x');
+        exitJButton.setText("Exit");
+        exitJButton.setToolTipText("Exit application");
+        exitJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitJButtonActionPerformed(evt);
+            }
+        });
+        controlPanel.add(exitJButton);
+
+        getContentPane().add(controlPanel, java.awt.BorderLayout.SOUTH);
+
+        fileJMenu.setMnemonic('F');
+        fileJMenu.setText("File");
+
+        clearJMenuItem.setMnemonic('C');
+        clearJMenuItem.setText("Clear");
+        clearJMenuItem.setToolTipText("Clear form");
+        clearJMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearJMenuItemActionPerformed(evt);
+            }
+        });
+        fileJMenu.add(clearJMenuItem);
+
+        printJMenuItem.setMnemonic('P');
+        printJMenuItem.setText("Print");
+        printJMenuItem.setToolTipText("Print form");
+        printJMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printJMenuItemActionPerformed(evt);
+            }
+        });
+        fileJMenu.add(printJMenuItem);
+        fileJMenu.add(fileJSeparator);
 
         exitJMenuItem.setMnemonic('x');
         exitJMenuItem.setText("Exit");
-        fileJMenu1.add(exitJMenuItem);
+        exitJMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitJMenuItemActionPerformed(evt);
+            }
+        });
+        fileJMenu.add(exitJMenuItem);
 
-        citiesJMenuBar.add(fileJMenu1);
+        citiesJMenuBar.add(fileJMenu);
 
         sortJMenu.setMnemonic('S');
         sortJMenu.setText("Sort");
 
-        menuButtonGroup.add(nameJRadioButtonMenuItem);
+        menubuttonGroup.add(nameJRadioButtonMenuItem);
         nameJRadioButtonMenuItem.setMnemonic('n');
+        nameJRadioButtonMenuItem.setSelected(true);
         nameJRadioButtonMenuItem.setText("By Name");
+        nameJRadioButtonMenuItem.setToolTipText("Sort by name and display only name");
+        nameJRadioButtonMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nameJRadioButtonMenuItemActionPerformed(evt);
+            }
+        });
         sortJMenu.add(nameJRadioButtonMenuItem);
 
-        menuButtonGroup.add(popJRadioButtonMenuItem);
-        popJRadioButtonMenuItem.setMnemonic('b');
-        popJRadioButtonMenuItem.setSelected(true);
+        menubuttonGroup.add(popJRadioButtonMenuItem);
+        popJRadioButtonMenuItem.setMnemonic('B');
         popJRadioButtonMenuItem.setText("By Population");
+        popJRadioButtonMenuItem.setToolTipText("Sort by populatoin a nd display name and population");
+        popJRadioButtonMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popJRadioButtonMenuItemActionPerformed(evt);
+            }
+        });
         sortJMenu.add(popJRadioButtonMenuItem);
 
         citiesJMenuBar.add(sortJMenu);
 
-        actionJMenu.setMnemonic('T');
-        actionJMenu.setText("DB Management");
+        actionJMenu.setMnemonic('t');
+        actionJMenu.setText("Action");
 
-        addJenuItem.setMnemonic('a');
-        addJenuItem.setText("Add New City");
-        actionJMenu.add(addJenuItem);
+        addJMenuItem.setMnemonic('A');
+        addJMenuItem.setText("Add New City");
+        addJMenuItem.setToolTipText("Add new city");
+        addJMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addJMenuItemActionPerformed(evt);
+            }
+        });
+        actionJMenu.add(addJMenuItem);
 
-        editJMenuItem.setMnemonic('e');
+        deleteJMenuItem.setMnemonic('D');
+        deleteJMenuItem.setText("Delete City");
+        deleteJMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteJMenuItemActionPerformed(evt);
+            }
+        });
+        actionJMenu.add(deleteJMenuItem);
+
+        editJMenuItem.setMnemonic('E');
         editJMenuItem.setText("Edit City");
+        editJMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editJMenuItemActionPerformed(evt);
+            }
+        });
         actionJMenu.add(editJMenuItem);
 
-        deleteJenuItem.setMnemonic('d');
-        deleteJenuItem.setText("Delete City");
-        actionJMenu.add(deleteJenuItem);
-
-        searchJMenuItem.setMnemonic('S');
+        searchJMenuItem.setMnemonic('r');
         searchJMenuItem.setText("Search City");
+        searchJMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchJMenuItemActionPerformed(evt);
+            }
+        });
         actionJMenu.add(searchJMenuItem);
 
         citiesJMenuBar.add(actionJMenu);
 
-        HelpJMenu.setMnemonic('H');
-        HelpJMenu.setText("Help");
+        helpJMenu.setMnemonic('H');
+        helpJMenu.setText("Help");
 
         aboutJMenuItem.setMnemonic('A');
         aboutJMenuItem.setText("About");
-        HelpJMenu.add(aboutJMenuItem);
+        aboutJMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aboutJMenuItemActionPerformed(evt);
+            }
+        });
+        helpJMenu.add(aboutJMenuItem);
 
-        citiesJMenuBar.add(HelpJMenu);
+        citiesJMenuBar.add(helpJMenu);
 
         setJMenuBar(citiesJMenuBar);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CitiesGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CitiesGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CitiesGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CitiesGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void clearAll()
+    {
+        //Clear and set JTextFields visible
+        citiesJList.setEnabled(false);
+        nameJTextField.setText("");
+        nameJTextField.setEditable(true);
+        popJTextField.setText("");
+        popJTextField.setEditable(true);
+        medianJTextField.setText("");
+        medianJTextField.setEditable(true);
+        percentJTextField.setText("");
+        percentJTextField.setEditable(true);
+        degreeJTextField.setText("");
+        degreeJTextField.setEditable(true);
+        nameJTextField.requestFocus();
+       
+    }
+    //Event handler for Adding a new city
+    //missing Javadocs
+    private void addJButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_addJButtonActionPerformed
+    {//GEN-HEADEREND:event_addJButtonActionPerformed
+        // Add new city
+        try
+        {            
+            // Create and display a new AddDialog
+            AddCity addCity = new AddCity(this, true);
+            addCity.setVisible(true);
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new CitiesGUI().setVisible(true);
+            // The modal dialog takes focus, upon regaining focus:
+            City newCity = addCity.getCity();
+
+            if (newCity != null && !cityExists(newCity)) 
+            {
+                // Add the new city to the database
+                cities.add(newCity);              
+                displayCities();                  //refresh GUI
+                searchCity(newCity.getName());    //highlight added city
+                
+                //save new city to file
+                saveCities();                                                
             }
-        });
+            else
+            {
+                JOptionPane.showMessageDialog(null, "City not Added", 
+                    "City is null or already exists", JOptionPane.WARNING_MESSAGE);                
+                citiesJList.setVisible(true);
+                citiesJList.setSelectedIndex(0);                
+            }
+
+        }
+        catch (NullPointerException nullex)
+        {
+            JOptionPane.showMessageDialog(null, "City not Added", "Input Error",
+                  JOptionPane.WARNING_MESSAGE);            
+            citiesJList.setVisible(true);
+            citiesJList.setSelectedIndex(0);
+        }           
+    }//GEN-LAST:event_addJButtonActionPerformed
+    
+     //save city to file--needs Javadocs
+    private void saveCities()
+    {       
+              
+    }
+    
+    //Javadocs??
+    private boolean cityExists(City metropolis)
+    {
+        boolean city_exist = false;
+        return false;
+    }
+
+    // Needs Javadocs
+    // Search for a city by name and highlight if found
+    private void searchCity(String cityName)
+    {
+        
+    }
+    
+    // Binary search for city
+    public static int binarySearch(String[] array, String key)
+    {
+        int result = 0;
+        return result;
+    }
+     /**
+     * Method: writeToFile
+     * Write cities to a text file that is comma delimited.
+     * @parem file: String
+     * @return void
+     * pre-condition: a valid file name, Citystats.txt is expected
+     * post-condition: a new text file is created with the current cities
+     * in the database
+     * @see WriteFile
+     * @see City
+     */
+
+    
+    //Event handler for clearing the form    
+    private void clearJMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_clearJMenuItemActionPerformed
+    {//GEN-HEADEREND:event_clearJMenuItemActionPerformed
+        // Empty all fields and reset form by calling the method clearAll
+
+}//GEN-LAST:event_clearJMenuItemActionPerformed
+
+    //Event handler for printing the form   
+    private void printJMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_printJMenuItemActionPerformed
+    {//GEN-HEADEREND:event_printJMenuItemActionPerformed
+        // Print entire form
+        
+}//GEN-LAST:event_printJMenuItemActionPerformed
+
+    private void exitJMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_exitJMenuItemActionPerformed
+    {//GEN-HEADEREND:event_exitJMenuItemActionPerformed
+        // Quit the application
+        exitJButtonActionPerformed(evt);
+}//GEN-LAST:event_exitJMenuItemActionPerformed
+
+    //Event handler for displaying cities sorted by name
+    private void nameJRadioButtonMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_nameJRadioButtonMenuItemActionPerformed
+    {//GEN-HEADEREND:event_nameJRadioButtonMenuItemActionPerformed
+        // display cities sorted by name
+        displayCities();        
+}//GEN-LAST:event_nameJRadioButtonMenuItemActionPerformed
+
+    //Event handler for displaying cities sorted by population
+    private void popJRadioButtonMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_popJRadioButtonMenuItemActionPerformed
+    {//GEN-HEADEREND:event_popJRadioButtonMenuItemActionPerformed
+        // display cities sorted by population
+        displayCities();        
+}//GEN-LAST:event_popJRadioButtonMenuItemActionPerformed
+
+    //Event handler for adding new city
+    private void addJMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_addJMenuItemActionPerformed
+    {//GEN-HEADEREND:event_addJMenuItemActionPerformed
+        // call buttonAddActionPerformed
+        addJButtonActionPerformed(evt);
+}//GEN-LAST:event_addJMenuItemActionPerformed
+
+    //Event handler for deleting the selected city
+    private void deleteJMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_deleteJMenuItemActionPerformed
+    {//GEN-HEADEREND:event_deleteJMenuItemActionPerformed
+        // call buttonDeleteActionPerformed
+        deleteJButtonActionPerformed(evt);
+}//GEN-LAST:event_deleteJMenuItemActionPerformed
+
+    //Event handler for editing the selected city
+    private void editJMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_editJMenuItemActionPerformed
+    {//GEN-HEADEREND:event_editJMenuItemActionPerformed
+        // call buttonEditActionPerformed
+        editJButtonActionPerformed(evt);
+}//GEN-LAST:event_editJMenuItemActionPerformed
+
+    private void aboutJMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_aboutJMenuItemActionPerformed
+    {//GEN-HEADEREND:event_aboutJMenuItemActionPerformed
+       //Display About form
+       
+}//GEN-LAST:event_aboutJMenuItemActionPerformed
+
+    //Event handler for searching specified city
+    private void searchJMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_searchJMenuItemActionPerformed
+    {//GEN-HEADEREND:event_searchJMenuItemActionPerformed
+        // Find specified city
+        
+    }//GEN-LAST:event_searchJMenuItemActionPerformed
+
+    private void exitJButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_exitJButtonActionPerformed
+    {//GEN-HEADEREND:event_exitJButtonActionPerformed
+        // End  program
+        System.exit(0);
+    }//GEN-LAST:event_exitJButtonActionPerformed
+
+     /**
+     * Method: citiesJListValueChanged,an event handler to populate
+     * the text fields onto the form with the selected city from the JList.
+     * @return void
+     * @parem evt: ListSelectionEvent evt
+     */
+    private void citiesJListValueChanged(javax.swing.event.ListSelectionEvent evt)//GEN-FIRST:event_citiesJListValueChanged
+    {//GEN-HEADEREND:event_citiesJListValueChanged
+        int index = (citiesJList.getSelectedIndex());
+        if (index == -1)
+        {
+            index = 0;
+        }
+        showCityData(index);
+    }//GEN-LAST:event_citiesJListValueChanged
+
+    //Event handler for editing new city
+    private void editJButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_editJButtonActionPerformed
+    {//GEN-HEADEREND:event_editJButtonActionPerformed
+        //Clear and set JTextFields visible--not a good a good implementation
+        
+//        nameJTextField.setEditable(false);
+//        popJTextField.setEditable(true);
+//        medianJTextField.setEditable(true);
+//        percentJTextField.setEditable(true);
+//        degreeJTextField.setEditable(true);
+//        popJTextField.requestFocus();
+//        popJTextField.selectAll();
+//
+//        addJButton.setEnabled(false);
+//        deleteJButton.setEnabled(false); 
+//        addJMenuItem.setEnabled(false);
+//        editJMenuItem.setEnabled(true);
+//        deleteJMenuItem.setEnabled(false);
+//        printJMenuItem.setEnabled(false);
+        //degreeJTextFieldActionPerformed(evt);
+    }//GEN-LAST:event_editJButtonActionPerformed
+
+    
+    //Event handler for deleting the selected city
+    private void deleteJButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_deleteJButtonActionPerformed
+    {//GEN-HEADEREND:event_deleteJButtonActionPerformed
+        // Delete selected city
+       
+    }//GEN-LAST:event_deleteJButtonActionPerformed
+
+    //Event handler for printing the form
+    private void printJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printJButtonActionPerformed
+       
+        
+    }//GEN-LAST:event_printJButtonActionPerformed
+      
+    /**
+    * @param args the command line arguments
+    */
+    public static void main(String args[])
+    {      
+        // show splash screen
+        CitiesGUI usaCities = new CitiesGUI();
+        //usaCities.setLocationRelativeTo(null);
+        usaCities.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu HelpJMenu;
     private javax.swing.JMenuItem aboutJMenuItem;
     private javax.swing.JMenu actionJMenu;
-    private javax.swing.JMenuItem addJenuItem;
+    private javax.swing.JButton addJButton;
+    private javax.swing.JMenuItem addJMenuItem;
+    private javax.swing.JList citiesJList;
     private javax.swing.JMenuBar citiesJMenuBar;
-    private javax.swing.JMenuItem clearJenuItem;
-    private javax.swing.JPanel controlJPanel1;
-    private javax.swing.JMenuItem deleteJenuItem;
-    private javax.swing.JPanel displayJPanel1;
+    private javax.swing.JMenuItem clearJMenuItem;
+    private javax.swing.JPanel controlPanel;
+    private javax.swing.JTextField degreeJTextField;
+    private javax.swing.JLabel degreetJLabel;
+    private javax.swing.JButton deleteJButton;
+    private javax.swing.JMenuItem deleteJMenuItem;
+    private javax.swing.JPanel displayJPanel;
+    private javax.swing.JButton editJButton;
     private javax.swing.JMenuItem editJMenuItem;
+    private javax.swing.JButton exitJButton;
     private javax.swing.JMenuItem exitJMenuItem;
-    private javax.swing.JMenu fileJMenu1;
-    private javax.swing.JPopupMenu.Separator fileSeperator;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JPanel listJPanel1;
-    private javax.swing.JLabel logoJLabel1;
-    private javax.swing.ButtonGroup menuButtonGroup;
+    private javax.swing.JMenu fileJMenu;
+    private javax.swing.JPopupMenu.Separator fileJSeparator;
+    private javax.swing.JMenu helpJMenu;
+    private javax.swing.JPanel listJPanel;
+    private javax.swing.JScrollPane llistJScrollPane;
+    private javax.swing.JLabel logoJLabel;
+    private javax.swing.JLabel medianJLabel;
+    private javax.swing.JTextField medianJTextField;
+    private javax.swing.ButtonGroup menubuttonGroup;
+    private javax.swing.JLabel nameJLabel;
     private javax.swing.JRadioButtonMenuItem nameJRadioButtonMenuItem;
+    private javax.swing.JTextField nameJTextField;
+    private javax.swing.JLabel percentJLabel;
+    private javax.swing.JTextField percentJTextField;
+    private javax.swing.JLabel popJLabel;
     private javax.swing.JRadioButtonMenuItem popJRadioButtonMenuItem;
-    private javax.swing.JMenuItem printJenuItem;
+    private javax.swing.JTextField popJTextField;
+    private javax.swing.JButton printJButton;
+    private javax.swing.JMenuItem printJMenuItem;
     private javax.swing.JMenuItem searchJMenuItem;
     private javax.swing.JMenu sortJMenu;
-    private javax.swing.JLabel titleJLabel1;
+    private javax.swing.JLabel titleJLabel;
     private javax.swing.JPanel titleJPanel;
     // End of variables declaration//GEN-END:variables
+
+
 }
