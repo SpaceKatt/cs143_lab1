@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class InsertionSortCityName {
     /* Compares two values. */
     private boolean less(City one, City two) {
-        return one.getName().compareTo(two.getName()) < 0;
+        return one.getName().compareToIgnoreCase(two.getName()) < 0;
     }
     
     /* Checks to make sure the ArrayList is sorted. */ 

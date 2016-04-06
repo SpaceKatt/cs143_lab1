@@ -1,6 +1,8 @@
 package USACities;
 
 import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -110,14 +112,30 @@ public class CitiesGUI extends JFrame {
      */
     private void displayCities()
     {
-        DefaultListModel model = new DefaultListModel();
-        for (City city: cities) {
-            String name = city.getName();
-            if (!model.contains(name)) {
-                model.addElement(name);
+        int location = citiesJList.getSelectedIndex();
+        String[] cityNames = new String[cities.size()];
+        if (popJRadioButtonMenuItem.isSelected()) {
+            selectionSort(cities);
+            for (int i = 0; i < cities.size(); i++) {
+                cityNames[i] = cities.get(i).getName() + ", " +
+                               cities.get(i).getPopulation() + " mil.";
+            }
+        } else {
+            insertionSort(cities);
+            for (int i = 0; i < cities.size(); i++) {
+                cityNames[i] = cities.get(i).getName();
             }
         }
-        citiesJList.setModel(model);
+//        DefaultListModel model = new DefaultListModel();
+//        for (City city: cities) {
+//            String name = city.getName();
+//            if (!model.contains(name)) {
+//                model.addElement(name);
+//            }
+//        }
+//        citiesJList.setModel(model);
+        citiesJList.setListData(cityNames);
+        
     }
 
     /**
@@ -162,8 +180,16 @@ public class CitiesGUI extends JFrame {
      */
     public int findMaximum(ArrayList < City > cities, int i)
     {
-       int max = 0;
-       return max;
+       double max = 0;
+       int maxIndex = i;
+       for (int j = i; j < cities.size(); j++) {
+           double pop = cities.get(j).getPopulation();
+           if (pop > max) {
+               max = pop;
+               maxIndex = j;
+           }
+       }
+       return maxIndex;
     }
 
     /**
@@ -179,7 +205,9 @@ public class CitiesGUI extends JFrame {
      */
     public void swap(ArrayList < City > cities, int i, int j)
     {
-       
+        City temp = cities.get(j);
+        cities.set(j, cities.get(i));
+        cities.set(i, temp);
     }
 
     // Binary search for city 
@@ -576,8 +604,9 @@ public class CitiesGUI extends JFrame {
         {            
             // Create and display a new AddDialog
             AddCity addCity = new AddCity(this, true);
+            addCity.setLocationRelativeTo(this);
             addCity.setVisible(true);
-
+            
             // The modal dialog takes focus, upon regaining focus:
             City newCity = addCity.getCity();
 
@@ -612,7 +641,7 @@ public class CitiesGUI extends JFrame {
      //save city to file--needs Javadocs
     private void saveCities()
     {       
-              
+        writeToFile(this.fileName);
     }
     
     //Javadocs??
@@ -626,15 +655,30 @@ public class CitiesGUI extends JFrame {
     // Search for a city by name and highlight if found
     private void searchCity(String cityName)
     {
-        
+        cityName = cityName.toLowerCase();
+        String[] cityNames = new String[cities.size()];
+        for (int i = 0; i < cities.size(); i++) {
+            cityNames[i] = cities.get(i).getName().toLowerCase();
+        }
+        int index = binarySearch(cityNames, cityName);
+        if (index != -1) {
+            citiesJList.setSelectedIndex(index);   
+        } else {
+            JOptionPane.showMessageDialog(this,
+                                          "City not found.",
+                                          "Search Error",
+                                          JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     // Binary search for city
     public static int binarySearch(String[] array, String key)
     {
-        int result = 0;
+        BinarySearchName searcher = new BinarySearchName();
+        int result = searcher.binarySearch(array, key);
         return result;
     }
+    
      /**
      * Method: writeToFile
      * Write cities to a text file that is comma delimited.
@@ -646,7 +690,10 @@ public class CitiesGUI extends JFrame {
      * @see WriteFile
      * @see City
      */
-
+    public void writeToFile(String file) {
+        CityFileWriter writer = new CityFileWriter(file, cities);
+        writer.writeTheFile();
+    }
     
     //Event handler for clearing the form    
     private void clearJMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_clearJMenuItemActionPerformed
@@ -715,7 +762,10 @@ public class CitiesGUI extends JFrame {
     private void searchJMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_searchJMenuItemActionPerformed
     {//GEN-HEADEREND:event_searchJMenuItemActionPerformed
         // Find specified city
-        
+        String cityName = JOptionPane.showInputDialog(this, "Search for:",
+                                                      "Search for City", 
+                                                      JOptionPane.PLAIN_MESSAGE);
+        searchCity(cityName);
     }//GEN-LAST:event_searchJMenuItemActionPerformed
 
     private void exitJButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_exitJButtonActionPerformed

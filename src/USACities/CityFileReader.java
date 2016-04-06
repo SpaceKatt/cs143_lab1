@@ -43,7 +43,6 @@ public class CityFileReader {
             buffRead = new BufferedReader(new FileReader(this.file_path));
         } catch (FileNotFoundException ex) {
             Logger.getLogger(CityFileReader.class.getName()).log(Level.SEVERE, null, ex);
-            ex.printStackTrace();
         }
     }
     

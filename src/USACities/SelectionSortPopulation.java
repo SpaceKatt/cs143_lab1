@@ -26,12 +26,12 @@ import java.util.ArrayList;
  */
 public class SelectionSortPopulation {
     
-    /* Compares two values. */
+    /** Compares two values. */
     private boolean less(City one, City two) {
         return one.getPopulation() < two.getPopulation();
     }
     
-    /* Checks to make sure the ArrayList is sorted. */ 
+    /** Checks to make sure the ArrayList is sorted. */ 
     private boolean isSorted(ArrayList<City> list) {
         for (int i = 0; i < list.size(); i++) {
             if(less(list.get(i), list.get(i - 1))) { return false; }
@@ -39,14 +39,14 @@ public class SelectionSortPopulation {
         return true;
     }
     
-    /* Swaps two elements in an ArrayList. */
+    /** Swaps two elements in an ArrayList. */
     private void swap(ArrayList list, int indexOne, int indexTwo) {
         Object temp = list.get(indexTwo);
         list.set(indexTwo, list.get(indexOne));
         list.set(indexOne, temp);
     }
     
-    /* Uses  insertion sort to sort an ArrayList of Cities by population. */
+    /** Uses  insertion sort to sort an ArrayList of Cities by population. */
     public void sort(ArrayList<City> list) {
         int arraySize = list.size();
         for (int i = 0; i < arraySize; i++) {

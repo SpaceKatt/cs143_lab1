@@ -17,12 +17,17 @@
 
 package USACities;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author thomas.kercheval
  */
-public class AddCity extends javax.swing.JFrame {
+public class AddCity extends javax.swing.JDialog {
 
+    private CitiesGUI guiCities;
+    private City newCity;
+    
     /**
      * Creates new form AddCity
      */
@@ -31,9 +36,15 @@ public class AddCity extends javax.swing.JFrame {
     }
 
     AddCity(CitiesGUI aThis, boolean b) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.setModal(b);
+        initComponents();
     }
 
+    
+    City getCity() {
+        return newCity;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -45,11 +56,30 @@ public class AddCity extends javax.swing.JFrame {
 
         titlePanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        controlPanel = new javax.swing.JPanel();
+        addJButton = new javax.swing.JButton();
+        exitJButton = new javax.swing.JButton();
+        displayJPanel = new javax.swing.JPanel();
+        nameJLabel = new javax.swing.JLabel();
+        nameJTextField = new javax.swing.JTextField();
+        popJLabel = new javax.swing.JLabel();
+        popJTextField = new javax.swing.JTextField();
+        medianJLabel = new javax.swing.JLabel();
+        medianJTextField = new javax.swing.JTextField();
+        percentJLabel = new javax.swing.JLabel();
+        percentJTextField = new javax.swing.JTextField();
+        degreetJLabel = new javax.swing.JLabel();
+        degreeJTextField = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Add New City Form");
+        setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/USACities/buckinghamfountain.jpg"))); // NOI18N
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 2, 48)); // NOI18N
+        jLabel2.setText("Add New City");
 
         javax.swing.GroupLayout titlePanelLayout = new javax.swing.GroupLayout(titlePanel);
         titlePanel.setLayout(titlePanelLayout);
@@ -58,20 +88,144 @@ public class AddCity extends javax.swing.JFrame {
             .addGroup(titlePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(317, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
+                .addContainerGap())
         );
         titlePanelLayout.setVerticalGroup(
             titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(titlePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(titlePanelLayout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         getContentPane().add(titlePanel, java.awt.BorderLayout.NORTH);
 
+        controlPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        controlPanel.setMinimumSize(new java.awt.Dimension(299, 45));
+        controlPanel.setLayout(new java.awt.GridLayout(1, 5, 5, 5));
+
+        addJButton.setBackground(new java.awt.Color(204, 255, 204));
+        addJButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        addJButton.setMnemonic('S');
+        addJButton.setText("Save");
+        addJButton.setToolTipText("Save new city");
+        addJButton.setMinimumSize(new java.awt.Dimension(57, 45));
+        addJButton.setPreferredSize(new java.awt.Dimension(57, 35));
+        addJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveJButtonActionPerformed(evt);
+            }
+        });
+        controlPanel.add(addJButton);
+
+        exitJButton.setBackground(new java.awt.Color(204, 255, 204));
+        exitJButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        exitJButton.setMnemonic('C');
+        exitJButton.setText("Cancel");
+        exitJButton.setToolTipText("Cancel adding new city");
+        exitJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelJButtonActionPerformed(evt);
+            }
+        });
+        controlPanel.add(exitJButton);
+
+        getContentPane().add(controlPanel, java.awt.BorderLayout.SOUTH);
+
+        displayJPanel.setLayout(new java.awt.GridLayout(5, 2, 5, 5));
+
+        nameJLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        nameJLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        nameJLabel.setText("Name of city: ");
+        displayJPanel.add(nameJLabel);
+
+        nameJTextField.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        displayJPanel.add(nameJTextField);
+
+        popJLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        popJLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        popJLabel.setText("Population (in millions): ");
+        displayJPanel.add(popJLabel);
+
+        popJTextField.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        popJTextField.setToolTipText("Press Enter to update");
+        displayJPanel.add(popJTextField);
+
+        medianJLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        medianJLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        medianJLabel.setText("Median income (per household): ");
+        displayJPanel.add(medianJLabel);
+
+        medianJTextField.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        medianJTextField.setToolTipText("Enter with no $ or commas and press Enter to update");
+        displayJPanel.add(medianJTextField);
+
+        percentJLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        percentJLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        percentJLabel.setText("Percent native to state: ");
+        displayJPanel.add(percentJLabel);
+
+        percentJTextField.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        percentJTextField.setToolTipText("Enter without % sign and pres Enter to update");
+        displayJPanel.add(percentJTextField);
+
+        degreetJLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        degreetJLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        degreetJLabel.setText("Percent advanced degrees: ");
+        displayJPanel.add(degreetJLabel);
+
+        degreeJTextField.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        degreeJTextField.setToolTipText("Enter without % sign and press Enter to update");
+        displayJPanel.add(degreeJTextField);
+
+        getContentPane().add(displayJPanel, java.awt.BorderLayout.CENTER);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void saveJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveJButtonActionPerformed
+        String name = nameJTextField.getText();
+        String median = medianJTextField.getText();
+        String local = percentJTextField.getText();
+        String degree = degreeJTextField.getText();
+        String population = popJTextField.getText();
+        boolean condition = !(name.equals("") && median.equals("") &&
+                            population.equals("") && degree.equals("") &&
+                            local.equals(""));
+        if (condition) {
+            try {
+                double pop = Double.parseDouble(population);
+                double medianDouble = Double.parseDouble(median);
+                double localDouble = Double.parseDouble(local);
+                double degreeDouble = Double.parseDouble(degree);
+                newCity = new City(name, pop, medianDouble, localDouble, 
+                        degreeDouble);
+                this.setVisible(false);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this,
+                                          "Some Fields must be numeric.",
+                                          "Incomplete Form",
+                                          JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this,
+                                          "All Fields must be complete.",
+                                          "Incomplete Form",
+                                          JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_saveJButtonActionPerformed
+
+    private void cancelJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelJButtonActionPerformed
+        // End  program
+        this.newCity = null;
+        this.setVisible(false);
+    }//GEN-LAST:event_cancelJButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -109,11 +263,23 @@ public class AddCity extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addJButton;
+    private javax.swing.JPanel controlPanel;
+    private javax.swing.JTextField degreeJTextField;
+    private javax.swing.JLabel degreetJLabel;
+    private javax.swing.JPanel displayJPanel;
+    private javax.swing.JButton exitJButton;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel medianJLabel;
+    private javax.swing.JTextField medianJTextField;
+    private javax.swing.JLabel nameJLabel;
+    private javax.swing.JTextField nameJTextField;
+    private javax.swing.JLabel percentJLabel;
+    private javax.swing.JTextField percentJTextField;
+    private javax.swing.JLabel popJLabel;
+    private javax.swing.JTextField popJTextField;
     private javax.swing.JPanel titlePanel;
     // End of variables declaration//GEN-END:variables
 
-    City getCity() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

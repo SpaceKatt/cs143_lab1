@@ -50,6 +50,16 @@ class City {
         this.local = local_pop;
         this.degree = degree_per;
     }
+
+    // Overloaded constructor
+    City(String name, String pop, String median_income,
+         String local_pop, String degree_per) {
+        this.city_name = name;
+        this.population = Double.parseDouble(pop);
+        this.median = Double.parseDouble(median_income);
+        this.local = Double.parseDouble(local_pop);
+        this.degree = Double.parseDouble(degree_per);
+    }
     
     // Array constructor
     City(String[] city_info) {
