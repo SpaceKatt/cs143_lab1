@@ -121,7 +121,9 @@ class City {
 
     @Override
     public String toString() {
-        return "City{" + "city_name=" + city_name + ", population=" + population + ", median=" + median + ", local=" + local + ", degree=" + degree + '}';
+        return "City{" + "city_name=" + city_name + ", population=" + 
+                population + ", median=" + median + ", local=" + local + 
+                ", degree=" + degree + '}';
     }
 
     public boolean equals(City city) {

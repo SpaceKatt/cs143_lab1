@@ -38,6 +38,12 @@ class CityFileWriter {
     // List of lines to be written
     private ArrayList<String> lines;
     
+    /**
+     * Constructor which stores the relative path of our database and
+     * creates the lines to be written in our file.
+     * @param file Relative file path of city database
+     * @param cities ArrayList of cities to be written
+     */
     CityFileWriter(String file, ArrayList<City> cities) {
         this.file = file;
         this.lines = createLines(cities);

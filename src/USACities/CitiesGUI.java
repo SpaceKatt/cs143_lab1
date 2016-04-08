@@ -35,18 +35,25 @@ import java.util.logging.Logger;
  */
 
 public class CitiesGUI extends JFrame {
-    // Class instance ArrayList of City objects
+    
+    /** 
+     * Class instance ArrayList of City objects.
+     */
     private ArrayList<City> cities = new ArrayList<>();
     
-    // external file name of cities
+    /**
+     * External file name of cities.
+     */
     private final String fileName = "src/USACities/Citystats.txt";
     //private final String fileNameXML = "src/USACities/Cities.xml";
+    
+    /**
+     * Format for displaying numbers relating to City objects.
+     */
     DecimalFormat number = new DecimalFormat("#,##0");        
     
-    //Javadocs??    
-    /** Creates new form CitiesGUI */
     /** Default constructor
-     * Creates new form Cities form centered, with Add button as default
+     * Creates new form CitiesGUI form centered, with Add button as default
      * The cities are read from an external text file, Citystats.txt, into
      * an ArrayList of City type
      */
@@ -126,14 +133,6 @@ public class CitiesGUI extends JFrame {
                 cityNames[i] = cities.get(i).getName();
             }
         }
-//        DefaultListModel model = new DefaultListModel();
-//        for (City city: cities) {
-//            String name = city.getName();
-//            if (!model.contains(name)) {
-//                model.addElement(name);
-//            }
-//        }
-//        citiesJList.setModel(model);
         citiesJList.setListData(cityNames);
         
     }
@@ -144,9 +143,6 @@ public class CitiesGUI extends JFrame {
      * sort algorithm which inserts city at correct position and shuffles
      * everyone else below that position.
      * @parem ArrayList: cities
-     * @return void
-     * pre-condition: ArrayList cities filled-in with City objects.
-     * post-condition: cities ArrayList is sorted by name.
      */
     public static void insertionSort(ArrayList <City> cities) {
 	InsertionSortCityName sorter = new InsertionSortCityName();
@@ -158,10 +154,7 @@ public class CitiesGUI extends JFrame {
      * Sorts ArrayList cities in descending order by population. Calls
      * findsMaximum to find city with maximum population in each pass
      * and swap to exchange cities when necessary.
-     * @parem ArrayList: cities
-     * @return void
-     * pre-condition: ArrayList cities filled-in with City objects.
-     * post-condition: cities ArrayList is sorted by population.
+     * @param cities
      */
     public void selectionSort(ArrayList < City > cities) {
         SelectionSortPopulation sorter = new SelectionSortPopulation();
@@ -578,6 +571,10 @@ public class CitiesGUI extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Clears all fields and sets them to be editable.
+     * @return void
+     */
     private void clearAll()
     {
         //Clear and set JTextFields visible
@@ -595,8 +592,14 @@ public class CitiesGUI extends JFrame {
         nameJTextField.requestFocus();
        
     }
-    //Event handler for Adding a new city
-    //missing Javadocs
+    
+    /**
+     * Method: addJButtonActionPerformed
+     * Event Handler for adding a new City.
+     * Spawns a form for adding a new City object.
+     * @param evt 
+     * @return void
+     */
     private void addJButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_addJButtonActionPerformed
     {//GEN-HEADEREND:event_addJButtonActionPerformed
         // Add new city
@@ -638,41 +641,100 @@ public class CitiesGUI extends JFrame {
         }           
     }//GEN-LAST:event_addJButtonActionPerformed
     
-     //save city to file--needs Javadocs
+    /**
+     * Method: saveCities
+     * Saves the cities to a file in the alphabetical order of their name.
+     * @see writeToFile
+     * @return void
+     */
     private void saveCities()
     {       
         writeToFile(this.fileName);
     }
     
-    //Javadocs??
+    /**
+     * Method: cityExists
+     * Performs linear search through City list, `this.cities`, 
+     * to determine if the specified City object exists.
+     * @param metropolis - City whose existence is in question
+     * @return boolean: true if the city exist.
+     */
     private boolean cityExists(City metropolis)
     {
-        boolean city_exist = false;
+        for (int i = 0; i < cities.size(); i++) {
+            if (metropolis.equals(cities.get(i))) {
+                return true;
+            }
+        }
         return false;
     }
 
-    // Needs Javadocs
-    // Search for a city by name and highlight if found
+    /**
+     * Method: searchCity
+     * Searches for a city by how they are currently sorted.
+     * Cities are first sorted by name, and then the index of the
+     * desired city is given. If citiesJList is sorted by name, then
+     * this index will be highlighted. If citiesJList is sorted by
+     * population then the population of the desired city is grabbed
+     * and then the cities are sorted by population and an array is 
+     * created which holds the population of each city. This population
+     * array is then searched and the index from this search is then
+     * highlighted in citiesJList.
+     * @param cityName 
+     * @return void
+     */
     private void searchCity(String cityName)
     {
-        cityName = cityName.toLowerCase();
-        String[] cityNames = new String[cities.size()];
-        for (int i = 0; i < cities.size(); i++) {
-            cityNames[i] = cities.get(i).getName().toLowerCase();
-        }
-        int index = binarySearch(cityNames, cityName);
-        if (index != -1) {
-            citiesJList.setSelectedIndex(index);   
+        if ((cityName != null) && (cityName.length() > 0)) {
+            insertionSort(cities);
+            cityName = cityName.toLowerCase();
+            String[] cityNames = new String[cities.size()];
+            for (int i = 0; i < cities.size(); i++) {
+                cityNames[i] = cities.get(i).getName().toLowerCase();
+            }
+            int index = binarySearch(cityNames, cityName);    
+            if (index != -1 && popJRadioButtonMenuItem.isSelected()) {
+                double cityPop = cities.get(index).getPopulation();
+                selectionSort(cities);
+                Double[] populations = new Double[cities.size()];
+                for (int i = 0; i < cities.size(); i++) {
+                    populations[i] = cities.get((cities.size()-1) - i).
+                                                 getPopulation();
+                }
+                index = cities.size()-1-binarySearch(populations, cityPop);
+            }
+            if (index != -1) {
+                citiesJList.setSelectedIndex(index);   
+            } else {
+                JOptionPane.showMessageDialog(this,
+                                              cityName+" not found.",
+                                              "Search Error",
+                                              JOptionPane.ERROR_MESSAGE);
+            }
         } else {
             JOptionPane.showMessageDialog(this,
-                                          "City not found.",
+                                          "No city name given.",
                                           "Search Error",
                                           JOptionPane.ERROR_MESSAGE);
         }
     }
     
-    // Binary search for city
-    public static int binarySearch(String[] array, String key)
+    public int linearSearch(Comparable[] array, Comparable key) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].equals(key)){
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    /**
+     * Calls our implementation for binary search.
+     * @param array - Comparable type array to be searched through
+     * @param key - Comparable type target to be searched for
+     * @return int: the index of the target in the array.
+     */
+    public static int binarySearch(Comparable[] array, Comparable key)
     {
         BinarySearchName searcher = new BinarySearchName();
         int result = searcher.binarySearch(array, key);
@@ -699,14 +761,14 @@ public class CitiesGUI extends JFrame {
     private void clearJMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_clearJMenuItemActionPerformed
     {//GEN-HEADEREND:event_clearJMenuItemActionPerformed
         // Empty all fields and reset form by calling the method clearAll
-
+        clearAll();
 }//GEN-LAST:event_clearJMenuItemActionPerformed
 
     //Event handler for printing the form   
     private void printJMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_printJMenuItemActionPerformed
     {//GEN-HEADEREND:event_printJMenuItemActionPerformed
         // Print entire form
-        
+        printJButtonActionPerformed(evt);
 }//GEN-LAST:event_printJMenuItemActionPerformed
 
     private void exitJMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_exitJMenuItemActionPerformed
@@ -754,7 +816,8 @@ public class CitiesGUI extends JFrame {
 
     private void aboutJMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_aboutJMenuItemActionPerformed
     {//GEN-HEADEREND:event_aboutJMenuItemActionPerformed
-       //Display About form
+       AboutJFrame cityAbout = new AboutJFrame();
+       cityAbout.setVisible(true);
        
 }//GEN-LAST:event_aboutJMenuItemActionPerformed
 
@@ -817,13 +880,16 @@ public class CitiesGUI extends JFrame {
     private void deleteJButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_deleteJButtonActionPerformed
     {//GEN-HEADEREND:event_deleteJButtonActionPerformed
         // Delete selected city
-       
+        int index = this.citiesJList.getSelectedIndex();
+        this.cities.remove(index);
+        displayCities();
+        saveCities();
     }//GEN-LAST:event_deleteJButtonActionPerformed
 
     //Event handler for printing the form
     private void printJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printJButtonActionPerformed
-       
-        
+        // Use the PrintUtilities class to print the GUI
+        PrintUtilities.printComponent(this);
     }//GEN-LAST:event_printJButtonActionPerformed
       
     /**

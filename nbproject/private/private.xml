@@ -3,14 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/cs143_lab1-master/src/USACities/BinarySearchName.java</file>
-            <file>file:/E:/cs143_lab1-master/src/USACities/CitiesGUI.java</file>
-            <file>file:/E:/cs143_lab1-master/src/USACities/SelectionSortPopulation.java</file>
-            <file>file:/E:/cs143_lab1-master/src/USACities/InsertionSortCityName.java</file>
-            <file>file:/E:/cs143_lab1-master/src/USACities/CityFileWriter.java</file>
-            <file>file:/E:/cs143_lab1-master/src/USACities/AddCity.java</file>
-            <file>file:/E:/cs143_lab1-master/src/USACities/City.java</file>
-            <file>file:/E:/cs143_lab1-master/src/USACities/Citystats.txt</file>
+            <file>file:/D:/cs143_lab1-master/src/USACities/AddCity.java</file>
+            <file>file:/D:/cs143_lab1-master/src/USACities/CitiesGUI.java</file>
         </group>
     </open-files>
 </project-private>

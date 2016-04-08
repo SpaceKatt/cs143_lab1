@@ -1,0 +1,15 @@
+/**
+ * 
+ * <pre>
+    Project: CitiesGUI Database
+    Platform: jdk 1.8.0_14; NetBeans IDE 8.1; Windows 10
+    Course: CS 143
+    Hours: 
+    Created on: 
+    Revised on: 
+ </pre>
+ *
+ * @author:	thomas.kercheval@go.shoreline.edu
+ * @version: 	%1% %2%
+ * 
+ */

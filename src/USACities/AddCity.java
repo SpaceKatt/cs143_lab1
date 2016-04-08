@@ -20,12 +20,23 @@ package USACities;
 import javax.swing.JOptionPane;
 
 /**
- *
- * @author thomas.kercheval
+ * A class which defines the form by which users may add a city
+ * to our application.
+ * <pre>
+    Project: CitiesGUI Database
+    Platform: jdk 1.8.0_14; NetBeans IDE 8.1; Windows 10
+    Course:
+    Hours: 2 hours and 15 minutes
+    Created on Apr 5, 2016, 12:32:49 PM
+    Revised on Arp 7, 2016, 2:30:21 PM
+ </pre>
+ * @author Thomas Kercheval
  */
 public class AddCity extends javax.swing.JDialog {
 
-    private CitiesGUI guiCities;
+    /**
+     * The City object which will be added to the Citystats database.
+     */
     private City newCity;
     
     /**
@@ -35,12 +46,21 @@ public class AddCity extends javax.swing.JDialog {
         initComponents();
     }
 
+    /**
+     * Constructor which spawns AddCity GUI and sets modality.
+     * @param aThis GUI which spawns AddCity
+     * @param b boolean value which indicates modality
+     */
     AddCity(CitiesGUI aThis, boolean b) {
         this.setModal(b);
         initComponents();
     }
 
-    
+    /**
+     * Method: getCity
+     * Returns the new city object
+     * @return City: the new city to be added.
+     */
     City getCity() {
         return newCity;
     }
@@ -78,7 +98,7 @@ public class AddCity extends javax.swing.JDialog {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/USACities/buckinghamfountain.jpg"))); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 2, 48)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tempus Sans ITC", 2, 36)); // NOI18N
         jLabel2.setText("Add New City");
 
         javax.swing.GroupLayout titlePanelLayout = new javax.swing.GroupLayout(titlePanel);
@@ -189,6 +209,12 @@ public class AddCity extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Event handler for saving the new city from text field input.
+     * Validates input before saving and closing the pop-up window.
+     * @param evt 
+     * @return void
+     */
     private void saveJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveJButtonActionPerformed
         String name = nameJTextField.getText();
         String median = medianJTextField.getText();
@@ -221,6 +247,11 @@ public class AddCity extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_saveJButtonActionPerformed
 
+    /**
+     * Event handler for the cancellation of new City creation.
+     * @param evt 
+     * @return void
+     */
     private void cancelJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelJButtonActionPerformed
         // End  program
         this.newCity = null;
@@ -228,6 +259,7 @@ public class AddCity extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelJButtonActionPerformed
 
     /**
+     * Spawns AddCity form.
      * @param args the command line arguments
      */
     public static void main(String args[]) {
