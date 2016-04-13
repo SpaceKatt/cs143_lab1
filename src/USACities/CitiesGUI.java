@@ -134,7 +134,11 @@ public class CitiesGUI extends JFrame {
             }
         }
         citiesJList.setListData(cityNames);
-        
+        if (location != -1 && location < cities.size()) {
+            citiesJList.setSelectedIndex(location);
+        } else {
+            citiesJList.setSelectedIndex(0);
+        }
     }
 
     /**

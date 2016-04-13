@@ -16,10 +16,33 @@
  */
 package USACities;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
- *
+ * Need lots of Javadocs... read regex
  * @author thomas.kercheval
  */
-public class GUIViewer {
+public class Validation {
+    /**
+     * Check to see if input is a double type.
+     * @param field The item we are validating as a double.
+     */
+    public static boolean isDouble(String field) {
+        Pattern pat = Pattern.compile("\\d+(\\.\\d+)?");
+        Matcher mat = pat.matcher(field);
+        return mat.matches();
+    }
     
+    public static boolean isPhone(String field) {
+        if (field.matches("\\d{10}")) {
+            return true;
+        } else if (field.matches("")) {
+            
+        }
+        
+        Pattern pat = Pattern.compile("");
+        Matcher mat = pat.matcher(field);
+        return mat.matches();
+    }
 }
