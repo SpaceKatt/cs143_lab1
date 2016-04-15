@@ -860,34 +860,53 @@ public class CitiesGUI extends JFrame {
     //Event handler for editing new city
     private void editJButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_editJButtonActionPerformed
     {//GEN-HEADEREND:event_editJButtonActionPerformed
-        //Clear and set JTextFields visible--not a good a good implementation
-        
-//        nameJTextField.setEditable(false);
-//        popJTextField.setEditable(true);
-//        medianJTextField.setEditable(true);
-//        percentJTextField.setEditable(true);
-//        degreeJTextField.setEditable(true);
-//        popJTextField.requestFocus();
-//        popJTextField.selectAll();
-//
-//        addJButton.setEnabled(false);
-//        deleteJButton.setEnabled(false); 
-//        addJMenuItem.setEnabled(false);
-//        editJMenuItem.setEnabled(true);
-//        deleteJMenuItem.setEnabled(false);
-//        printJMenuItem.setEnabled(false);
-        //degreeJTextFieldActionPerformed(evt);
+        int index = this.citiesJList.getSelectedIndex();
+        try {
+            EditCity editCity = new EditCity(this, true, this.cities.get(index));
+            editCity.setLocationRelativeTo(this);
+            editCity.setVisible(true);
+
+            // The modal dialog takes focus, upon regaining focus:
+            City editedCity = editCity.getCity();
+            if (editedCity != null) {
+                // Replaces the edited dancer to the database
+                cities.set(index, editedCity);
+                displayCities();                  //refresh GUI
+                searchCity(editedCity.getName());    //highlight edited dancer
+
+                //save new dancer to file
+                saveCities();
+            } else {
+                JOptionPane.showMessageDialog(null, "City not Edited",
+                                              "City is null...",
+                                              JOptionPane.WARNING_MESSAGE);
+                citiesJList.setVisible(true);
+                citiesJList.setSelectedIndex(0);
+            }
+
+        } catch (NullPointerException nullex) {
+            JOptionPane.showMessageDialog(null, "City not Edited",
+                                          "Edit cancelled",
+                                          JOptionPane.INFORMATION_MESSAGE);
+            citiesJList.setVisible(true);
+            citiesJList.setSelectedIndex(index);
+        }
     }//GEN-LAST:event_editJButtonActionPerformed
 
     
     //Event handler for deleting the selected city
     private void deleteJButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_deleteJButtonActionPerformed
     {//GEN-HEADEREND:event_deleteJButtonActionPerformed
-        // Delete selected city
-        int index = this.citiesJList.getSelectedIndex();
-        this.cities.remove(index);
-        displayCities();
-        saveCities();
+        int reply = JOptionPane.showConfirmDialog(this, "Are you sure?",
+            "Confirm City deletion...",
+            JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+        if (reply == JOptionPane.YES_OPTION) {
+            // Delete selected city
+            int index = this.citiesJList.getSelectedIndex();
+            this.cities.remove(index);
+            displayCities();
+            saveCities();
+        } else {}
     }//GEN-LAST:event_deleteJButtonActionPerformed
 
     //Event handler for printing the form

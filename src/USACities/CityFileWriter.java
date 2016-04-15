@@ -16,14 +16,12 @@
  */
 package USACities;
 
-import java.awt.List;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,7 +34,7 @@ class CityFileWriter {
     // File path (relative)
     private final String file;
     // List of lines to be written
-    private ArrayList<String> lines;
+    private final ArrayList<String> lines;
     
     /**
      * Constructor which stores the relative path of our database and
